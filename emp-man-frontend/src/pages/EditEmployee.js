@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import EmployeeForm from "../components/emp/EmployeeForm";
+import LoadingAnimation from "../components/ui/LoadingAnimation";
 
 function EditEmployeesPage() {
   const history = useHistory();
@@ -8,28 +9,43 @@ function EditEmployeesPage() {
 
   const [isLoading, setIsLoading] = useState(true);
   const [loadedEmployee, setLoadedEmployee] = useState({});
+  const [isError, setIsError] = useState(null);
 
   function EditEmployeeHandler(employeeData) {
-    fetch(
-      // "https://emp-man-ff443-default-rtdb.firebaseio.com/employees.json",
-      `http://192.168.139.61:5000/employees/edit/${id}`,
-      {
-        method: "PUT",
-        body: JSON.stringify(employeeData),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    ).then(() => {
-      history.replace("/");
-    });
+    setIsError(null);
+    fetch(`http://192.168.139.61:5000/employees/edit/${id}`, {
+      method: "PUT",
+      body: JSON.stringify(employeeData),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          throw new Error(response.status);
+        }
+      })
+      .then((data) => {
+        history.replace("/");
+      })
+      .catch((err) => {
+        // Handle error here.
+        setIsError(err.message);
+      });
   }
 
   useEffect(() => {
     setIsLoading(true);
+    setIsError(null);
     fetch(`http://192.168.139.61:5000/employees/edit/${id}`)
       .then((response) => {
-        return response.json();
+        if (response.ok) {
+          return response.json();
+        } else {
+          throw new Error(response.status);
+        }
       })
       .then((data) => {
         const emp = {};
@@ -40,13 +56,33 @@ function EditEmployeesPage() {
         emp.address = data.address;
         setIsLoading(false);
         setLoadedEmployee(emp);
+      })
+      .catch((err) => {
+        // Handle error here.
+        setIsLoading(false);
+        setIsError(err.message);
       });
   }, [id]);
 
   if (isLoading) {
     return (
       <section>
-        <p>Loading...</p>
+        <LoadingAnimation />
+      </section>
+    );
+  }
+
+  if(isError == 404){
+    return (
+      <section>
+        <p>404 Error</p>
+      </section>
+    );
+  }
+  else if(isError){
+    return (
+      <section>
+        <p>Some Other Error</p>
       </section>
     );
   }
@@ -54,7 +90,10 @@ function EditEmployeesPage() {
   return (
     <section>
       <h1>Edit Employee Details</h1>
-      <EmployeeForm employee={loadedEmployee} onSaveEmployee={EditEmployeeHandler} />
+      <EmployeeForm
+        employee={loadedEmployee}
+        onSaveEmployee={EditEmployeeHandler}
+      />
     </section>
   );
 }

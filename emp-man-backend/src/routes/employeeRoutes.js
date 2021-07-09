@@ -6,7 +6,7 @@ router = () => {
   employeeRouter.get("/", (req, res) => {
     EmployeeData.find()
       .then((employees) => {
-        res.send(employees);
+        res.status(200).send(employees);
       })
       .catch((err) => {
         console.log(err);
@@ -18,31 +18,46 @@ router = () => {
     let newEmp = req.body;
     EmployeeData(newEmp)
       .save()
-      .then(() => {
-        res.send();
+      .then((emp) => {
+        // Newly saved  document is available in emp variable
+        res.status(200).send(emp);
+      })
+      .catch((err) => {
+        console.log(err);
+        // Handle errors
+        res.status(500).send("Database write failed");
       });
   });
 
   employeeRouter.get("/edit/:id", (req, res) => {
     let empId = req.params.id;
     EmployeeData.findById(empId)
-      .then((employee) => {
-        if (employee) res.send(employee);
-        else throw Error("Employee not Found");
+      .then((emp) => {
+        if (emp) {
+          res.status(200).send(emp);
+        }
+        else{
+          res.status(404).send("Not Found");
+        } 
       })
       .catch((err) => {
         console.log(err);
         // Handle errors
-        res.status(404).send("Not Found");
+        res.status(500).send("Database read failed");
       });
   });
 
   employeeRouter.put("/edit/:id", (req, res) => {
     let empId = req.params.id;
     let updatedEmp = req.body;
-    EmployeeData.findByIdAndUpdate(empId, updatedEmp)
-      .then(() => {
-        res.send();
+    EmployeeData.findByIdAndUpdate(empId, updatedEmp, {new:true})
+      .then((emp) => {
+        if (emp) {
+          res.status(200).send(emp);
+        }
+        else{
+          res.status(404).send("Not Found");
+        }
       })
       .catch((err) => {
         console.log(err);
@@ -54,8 +69,12 @@ router = () => {
   employeeRouter.delete("/delete/:id", (req, res) => {
     let empId = req.params.id;
     EmployeeData.findByIdAndDelete(empId)
-      .then(() => {
-        res.send();
+      .then((emp) => {
+        if (emp) {
+          res.status(200).send(emp);
+        } else {
+          res.status(404).send("Not Found");
+        }
       })
       .catch((err) => {
         console.log(err);

@@ -19,10 +19,23 @@ function Employee(props) {
   function confirmDeleteHandler() {
     fetch(`http://192.168.139.61:5000/employees/delete/${props.id}`, {
       method: "DELETE",
-    }).then(() => {
-      setModalView(false);
-      props.afterDelete();
-    });
+    })
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          throw new Error(response.status);
+        }
+      })
+      .then((data) => {
+        setModalView(false);
+        props.afterDelete();
+      })
+      .catch((err) => {
+        // Handle error here. 404, 500
+        setModalView(false);
+        props.afterDelete(err.message);
+      });
   }
 
   return (
@@ -44,17 +57,17 @@ function Employee(props) {
           </p>
         </div>
         <div className={classes.actions}>
-          <Link to={`/edit-employee/${props.id}`}><button>Edit</button></Link>
+          <Link to={`/edit-employee/${props.id}`}>
+            <button>Edit</button>
+          </Link>
           <button onClick={deleteHandler}>Delete</button>
         </div>
-        {
-          isModalOpen && (
-            <DeleteConfirmModal
-              onCancel={closeModalHandler}
-              onConfirm={confirmDeleteHandler}
-            />
-          )
-        }
+        {isModalOpen && (
+          <DeleteConfirmModal
+            onCancel={closeModalHandler}
+            onConfirm={confirmDeleteHandler}
+          />
+        )}
         {isModalOpen && <Backdrop onClick={closeModalHandler} />}
       </Card>
     </li>
