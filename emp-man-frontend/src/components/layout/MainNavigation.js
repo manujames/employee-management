@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import classes from "./MainNavigation.module.css";
 
+// Top navigation bar
 function MainNavigation() {
   return (
     <header className={classes.header}>
@@ -12,7 +13,7 @@ function MainNavigation() {
           </li>
 
           <li>
-            <Link to="/add-employee">Add New Employee</Link>
+            <Link to="/add-employee">Add Employee</Link>
           </li>
         </ul>
       </nav>

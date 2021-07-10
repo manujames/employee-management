@@ -1,0 +1,33 @@
+.errorCard{
+  margin: 3rem auto;
+  max-width: 40rem;
+  text-align: center;
+  position: relative;
+  top: 20vh
+}
+
+.errorCard p{
+  padding: 2rem 0.5rem 0.5rem;
+}
+
+.actions {
+  padding: 0 1.5rem 1.5rem;
+  text-align: center;
+}
+
+.actions button {
+  font: inherit;
+  cursor: pointer;
+  color: white;
+  border: 1px solid #800040;
+  background-color: #800040;
+  padding: 0.5rem 1.5rem;
+  margin: 5px;
+  border-radius: 4px;
+}
+
+.actions button:hover,
+.actions button:active {
+  background-color: #9c1458;
+  border-color: #9c1458;
+}

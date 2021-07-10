@@ -4,6 +4,7 @@ import Employee from "./Employee";
 function EmployeeList(props) {
   return (
     <ul className={classes.list}>
+      {/* Loop through all employees in props and list them using <Employee> component */}
       {props.employees.map((employee) => (
         <Employee
           key={employee._id}

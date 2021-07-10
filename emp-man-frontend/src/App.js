@@ -8,6 +8,7 @@ import EditEmployeesPage from "./pages/EditEmployee";
 function App() {
   return (
     <Layout>
+      {/* This switch handles routing. Page selected by switch will be shown under MainNavigation in layout */}
       <Switch>
         <Route path="/" exact><EmployeesPage /></Route>
         <Route path="/add-employee" exact><AddEmployeePage /></Route>

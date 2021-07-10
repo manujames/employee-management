@@ -2,6 +2,7 @@ import classes from "./EmployeeForm.module.css";
 import Card from "../ui/Card";
 import { useEffect, useRef } from "react";
 
+// This form is used for add employee and edit employee pages
 function EmployeeForm(props) {
   const nameInputRef = useRef();
   const designationInputRef = useRef();
@@ -9,6 +10,8 @@ function EmployeeForm(props) {
   const phoneInputRef = useRef();
   const addressInputRef = useRef();
 
+  // Fill each ref's value if any values provided from parent component
+  // This useEffect will be called everytime when props.employee changes
   useEffect(() => {
     nameInputRef.current.value = props.employee? props.employee.name : "";
     designationInputRef.current.value = props.employee? props.employee.designation : "";
@@ -17,6 +20,9 @@ function EmployeeForm(props) {
     addressInputRef.current.value = props.employee? props.employee.address : "";
   },[props.employee]);
 
+  // This function will be called when user clicks save button
+  // Get employee data from user inputs and pass it to 
+  // the parent component's Add/Edit employee handler
   function submitHandler(event) {
     event.preventDefault();
 
@@ -30,6 +36,7 @@ function EmployeeForm(props) {
     props.onSaveEmployee(employeeData);
   }
 
+  // Render employee form
   return (
     <div className={classes.formCard}>
       <Card>
