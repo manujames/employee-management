@@ -1,0 +1,51 @@
+.header {
+  width: 75%;
+  height: 100vh;
+  display: block;
+  background-color: #8b0035;
+  padding: 0 5%;
+  position: fixed;
+  left: 0;
+  z-index: 10;
+}
+
+.mobileMenu{
+  display: flex;
+}
+
+@media (min-width: 786px) {
+  .mobNav{
+    display: none !important;
+  }
+}
+
+.header ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.header li {
+  margin-top: 1rem;
+  text-align: left;
+}
+
+.header a {
+  text-decoration: none;
+  font-size: 1.2rem;
+  color: white;
+}
+
+.header a:hover,
+.header a:active,
+.header a.active {
+  color: #fcb8d2;
+}
+
+.selected {
+  color: #fcb8d2 !important;
+  font-size: 1.3rem !important;
+  font-weight: bold !important;
+}
